@@ -57,6 +57,9 @@ recho () {
 # qonnx
 pip install --user -e ${FINN_ROOT}/deps/qonnx
 # finn-experimental
+if [ "`whoami`" = "root" ]; then
+  git config --global --add safe.directory ${FINN_ROOT}/deps/finn-experimental
+fi;
 pip install --user -e ${FINN_ROOT}/deps/finn-experimental
 # brevitas
 pip install --user -e ${FINN_ROOT}/deps/brevitas
@@ -65,6 +68,9 @@ pip install --user -e ${FINN_ROOT}/deps/pyverilator
 
 if [ -f "${FINN_ROOT}/setup.py" ];then
   # run pip install for finn
+  if [ "`whoami`" = "root" ]; then
+    git config --global --add safe.directory ${FINN_ROOT}
+  fi;
   pip install --user -e ${FINN_ROOT}
 else
   recho "Unable to find FINN source code in ${FINN_ROOT}"
