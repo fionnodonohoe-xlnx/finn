@@ -1,0 +1,29 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+    - libsm
+    - libxext
+    - libxrender
+    - openssh
+    - python@3.8.6
+    - git@2.27
+    - cmake@3.9.6
+    - verilator
+    - nano
+    - zsh
+    - rsync
+    - sshpass
+    - wget
+    - unzip
+    - zip
+
+  # Specifies that we want "view" folders which are like pseudo root folders with symlinks to all the tools
+  view: true
+  concretizer:
+    unify: true
+    targets:
+      granularity: generic
