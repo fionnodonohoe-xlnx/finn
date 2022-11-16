@@ -126,5 +126,18 @@ if [ "$FINN_SKIP_DEP_REPOS" = "0" ]; then
   ./fetch-repos.sh
 fi
 
+if [ -n "$FINN_XILINX_PATH" ]; then
+  VITIS_PATH="$FINN_XILINX_PATH/Vitis/$FINN_XILINX_VERSION/"
+  if [ -f "$VITIS_PATH/settings64.sh" ]; then
+    source "$VITIS_PATH/settings64.sh"
+    gecho "Found Vitis at $VITIS_PATH"
+  else
+    yecho "Unable to find $VITIS_PATH/settings64.sh"
+    yecho "Functionality dependent on Vitis HLS will not be available."
+    yecho "Please note that FINN needs at least version 2020.2 for Vitis HLS support."
+    yecho "If you need Vitis HLS, ensure FINN_XILINX_PATH is set correctly."
+  fi
+fi
+
 FINN_EXEC+="$FINN_CMD"
 $FINN_EXEC
