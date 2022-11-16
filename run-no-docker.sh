@@ -93,7 +93,7 @@ if [[ $env_list != *"$SPACK_ENV_NAME"* ]]; then
   spack env create $SPACK_ENV_NAME spack.yaml
 fi
 spack env activate $SPACK_ENV_NAME
-spack install
+spack install -y
 
 # Create/Activate Python VENV
 if [ ! -f "$VENV_PATH/bin/activate" ]; then
