@@ -4,7 +4,6 @@ attrs==19.3.0
 Babel==2.11.0
 backcall==0.2.0
 bitstring==3.1.9
--e git+https://github.com/Xilinx/brevitas.git@a5b71d6de1389d3e7db898fef72e014842670f03#egg=brevitas
 cachetools==5.2.0
 certifi==2022.9.24
 cffi==1.15.0
@@ -13,7 +12,6 @@ charset-normalizer==2.1.1
 clize==4.1.1
 cycler==0.11.0
 dataclasses-json==0.5.7
--e git+https://github.com/fbcotter/dataset_loading.git@5b9faa226e5f7c857579d31cdd9acde8cdfb816f#egg=dataset_loading
 deap==1.3.3
 decorator==5.1.1
 dependencies==2.0.1
@@ -25,8 +23,6 @@ exceptiongroup==1.0.1
 execnet==1.9.0
 executing==1.2.0
 filelock==3.8.0
--e git+git@github.com:Xilinx/finn.git@41740ed1a953c09dd2f87b03ebfde5f9d8a7d4f0#egg=finn
--e git+https://github.com/Xilinx/finn-experimental.git@9cbd2787b5160e2b44e0e8164a0df1457dbd5366#egg=finn_experimental
 flatbuffers==22.10.26
 future==0.18.2
 future-annotations==1.0.0
@@ -94,10 +90,8 @@ pytest-parallel==0.1.0
 pytest-xdist==2.4.0
 python-dateutil==2.8.2
 pytz==2022.6
--e git+https://github.com/maltanar/pyverilator.git@64b8294ff1afebb47be76fcad6ae87027e0402c2#egg=PyVerilator
 PyYAML==6.0
 pyzmq==24.0.1
--e git+https://github.com/fastmachinelearning/qonnx.git@398a0ecfcb32407c0a3df39246cf6d2bca02886c#egg=qonnx
 requests==2.28.1
 requests-oauthlib==1.3.1
 rsa==4.9
@@ -124,7 +118,8 @@ tokenize-rt==5.0.0
 toml==0.10.2
 tomli==2.0.1
 toposort==1.7
-torch==1.10.0
+torch==1.9.1
+torchvision==0.10.1
 tornado==6.2
 tqdm==4.31.1
 traitlets==5.5.0
@@ -136,3 +131,9 @@ virtualenv==20.16.6
 wcwidth==0.2.5
 wget==3.2
 zipp==3.10.0
+-e git+https://github.com/fbcotter/dataset_loading.git@0.0.4#egg=dataset_loading
+-e $SCRIPTPATH/deps/qonnx
+-e $SCRIPTPATH/deps/finn-experimental
+-e $SCRIPTPATH/deps/brevitas
+-e $SCRIPTPATH/deps/pyverilator
+-e $SCRIPTPATH

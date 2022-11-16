@@ -67,10 +67,23 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 VENV_NAME="finn_venv"
-VENV_PATH="$SCRIPTPATH/../$VENV_NAME"
-VENV_ACTIVATE_PATH="$VENV_PATH/bin/activate"
-REQUIREMENTS_FILE="$SCRIPTPATH/requirements_full.txt"
 SPACK_ENV_NAME="finn_env"
+REQUIREMENTS="$SCRIPTPATH/requirements_full.txt"
+REQUIREMENTS_TEMPLATE="$SCRIPTPATH/requirements_template.txt"
+REQUIREMENTS_TMP="$SCRIPTPATH/requirements_tmp.txt"
+
+# Set paths for local python requirements
+cat $REQUIREMENTS_TEMPLATE | sed "s|\$SCRIPTPATH|${SCRIPTPATH}|gi" > $REQUIREMENTS
+
+# the settings below will be taken from environment variables if available,
+# otherwise the defaults below will be used
+: ${FINN_SKIP_DEP_REPOS="0"}
+: ${FINN_ROOT=$SCRIPTPATH}
+: ${FINN_BUILD_DIR="$FINN_ROOT/../tmp"}
+: ${VENV_PATH=$(realpath "$SCRIPTPATH/../$VENV_NAME")}
+
+export FINN_ROOT=$FINN_ROOT
+export FINN_BUILD_DIR=$FINN_BUILD_DIR
 
 # Activate Spack environment
 source $SPACK_PATH
@@ -83,23 +96,18 @@ spack env activate $SPACK_ENV_NAME
 spack install
 
 # Create/Activate Python VENV
-if [ ! -f "$VENV_ACTIVATE_PATH" ]; then
+if [ ! -f "$VENV_PATH/bin/activate" ]; then
   python -m venv $VENV_PATH
 fi
+source "$VENV_PATH/bin/activate"
 
-source $VENV_ACTIVATE_PATH
-
-pip freeze > temp_requirements.txt
-diff $REQUIREMENTS_FILE temp_requirements.txt &>/dev/null
+# Check if requirements have already been installed, install if not
+pip freeze > $REQUIREMENTS_TMP
+diff $REQUIREMENTS $REQUIREMENTS_TMP &>/dev/null
 if [ $? -eq 1 ]; then
-  pip install -r $REQUIREMENTS_FILE
+  pip install -r $REQUIREMENTS
 fi
-rm temp_requirements.txt
-
-# the settings below will be taken from environment variables if available,
-# otherwise the defaults below will be used
-: ${FINN_SKIP_DEP_REPOS="0"}
-: ${FINN_ROOT=$SCRIPTPATH}
+rm $REQUIREMENTS_TMP
 
 if [ "$1" = "quicktest" ]; then
   gecho "Running test suite (non-Vivado, non-slow tests)"
@@ -110,12 +118,8 @@ else
   exit 0
 fi
 
-VIVADO_HLS_LOCAL=$VIVADO_PATH
-VIVADO_IP_CACHE=$FINN_HOST_BUILD_DIR/vivado_ip_cache
-
 # ensure build dir exists locally
-mkdir -p $FINN_HOST_BUILD_DIR
-mkdir -p $FINN_SSH_KEY_DIR
+mkdir -p $FINN_BUILD_DIR
 
 # Ensure git-based deps are checked out at correct commit
 if [ "$FINN_SKIP_DEP_REPOS" = "0" ]; then
@@ -123,5 +127,4 @@ if [ "$FINN_SKIP_DEP_REPOS" = "0" ]; then
 fi
 
 FINN_EXEC+="$FINN_CMD"
-
 $FINN_EXEC
