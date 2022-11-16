@@ -112,6 +112,11 @@ rm $REQUIREMENTS_TMP
 if [ "$1" = "quicktest" ]; then
   gecho "Running test suite (non-Vivado, non-slow tests)"
   FINN_CMD="docker/quicktest.sh"
+elif [ "$1" = "build_custom" ]; then
+  BUILD_CUSTOM_DIR=$(readlink -f "$2")
+  FLOW_NAME=${3:-build}
+  gecho "Running build_custom: $BUILD_CUSTOM_DIR/$FLOW_NAME.py"
+  FINN_CMD="python -mpdb -cc -cq $FLOW_NAME.py"
 else
   gecho "Spack and Python Virtual environments installed"
   gecho "Nothing more to do"
@@ -124,6 +129,10 @@ mkdir -p $FINN_BUILD_DIR
 # Ensure git-based deps are checked out at correct commit
 if [ "$FINN_SKIP_DEP_REPOS" = "0" ]; then
   ./fetch-repos.sh
+fi
+
+if [ -n "$BUILD_CUSTOM_DIR" ]; then
+  cd $BUILD_CUSTOM_DIR
 fi
 
 if [ -n "$FINN_XILINX_PATH" ]; then
