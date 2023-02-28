@@ -125,10 +125,7 @@ setup_py_env () {
   source "$PY_VENV_PATH/bin/activate"
 
   # Check if requirements have already been installed, install if not
-  echo "INSTALL REQUIREMENTS"
   pip install -r $REQUIREMENTS
-  echo $?
-  echo "INSTALL REQUIREMENTS - DONE"
   if [ $? -ne 0 ]; then
       echo "$(basename $BASH_SOURCE): Python package installation failed"
       exit 1
