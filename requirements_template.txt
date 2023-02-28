@@ -50,7 +50,7 @@ matplotlib-inline==0.1.6
 mip==1.14.1
 mypy-extensions==0.4.3
 nest-asyncio==1.5.6
-netron==6.1.5
+netron==6.4.2
 networkx==2.8.8
 nodeenv==1.7.0
 numpy==1.23.4
